@@ -49,6 +49,8 @@ const getNextStage = (currentStage) => {
       return 'Order in Making';
     case 'Order in Making':
       return 'Order Ready';
+      case 'Order Ready':
+      return 'Order Picked';
     default:
       return currentStage;
   }

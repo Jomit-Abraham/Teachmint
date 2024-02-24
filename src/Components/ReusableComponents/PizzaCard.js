@@ -1,33 +1,59 @@
 import { Button, Card, CardContent, Typography } from '@mui/material';
-import React from 'react';
-import {  useDispatch } from 'react-redux';
-import { movePizzaToNextStage } from '../../Redux/Actions/Action';
-
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { movePizzaToNextStage,markPizzaAsPicked } from '../../Redux/Actions/Action';
 
 const PizzaCard = (props) => {
-
+    const { pizza } = props
     const dispatch = useDispatch();
+    const [totalSeconds, setTotalSeconds] = useState(0);
+    const [isActive, setIsActive] = useState(true);
+    const [redAlert,setRedAlert]=useState(false)
+
+    useEffect(() => {
+        let interval = null;
+
+        if (isActive) {
+            interval = setInterval(() => {
+                setTotalSeconds((prevSeconds) => prevSeconds + 1);
+            }, 1000);
+        } else if (!isActive && totalSeconds !== 0) {
+            clearInterval(interval);
+        }
+
+        return () => clearInterval(interval);
+    }, [isActive, totalSeconds]);
 
     const handleMoveToNextStage = (pizzaId) => {
         dispatch(movePizzaToNextStage(pizzaId));
-      };
-    console.log(props)
-    const {pizza}=props
-  //const classes = useStyles({ isStale: pizza.timeInStage > 180 }); // Check if pizza is stale
+    };
+  const handleMarkAsPicked = (pizzaId) => {
+    dispatch(markPizzaAsPicked(pizzaId));
+  };
 
-  return (
-    <Card sx={{width:'150px', height:'auto'}}>
-      <CardContent>
-        <Typography variant="h6">
-          Pizza No{pizza.id}
-        </Typography>
-        <Typography variant="body2">
-         {pizza.timeInStage} seconds
-        </Typography>
-        <Button sx={{variant:'contained'}} onClick={()=>handleMoveToNextStage(pizza.id) }>Next</Button>
-      </CardContent>
-    </Card>
-  );
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        if(minutes===3&& seconds===1){setRedAlert(true)}
+        return `${minutes < 10 ? '0' : ''}${minutes} Min :${seconds < 10 ? '0' : ''}${seconds} Sec`;
+      };
+
+    return (
+        <Card sx={{ width: '150px', height: 'auto', display: 'grid', justifyContent: 'center', background: redAlert?'#eb2207': '#50a69a' }}>
+            <CardContent>
+                <Typography variant="h6">
+                    Pizza No{pizza.id}
+                </Typography>
+                <Typography variant="body2">
+                    {formatTime(totalSeconds)}
+                </Typography>
+                { pizza.stage==='Order Ready' ?<Button variant='contained' onClick={() =>  handleMarkAsPicked(pizza.id)}>Picked</Button>:
+                <Button variant='contained' onClick={() => handleMoveToNextStage(pizza.id)}>Next</Button>
+                }
+                
+            </CardContent>
+        </Card>
+    );
 };
 
 export default PizzaCard;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { markPizzaAsPicked, cancelPizzaOrder } from '../Redux/Actions/Action';
+import {  cancelPizzaOrder } from '../Redux/Actions/Action';
 import { Box } from '@mui/material';
 
 const MainDisplay = () => {
@@ -10,9 +10,7 @@ const MainDisplay = () => {
 
   
 
-  const handleMarkAsPicked = (pizzaId) => {
-    dispatch(markPizzaAsPicked(pizzaId));
-  };
+  
 
   const handleCancelOrder = (pizzaId) => {
     dispatch(cancelPizzaOrder(pizzaId));
@@ -47,7 +45,7 @@ const MainDisplay = () => {
               <td>
                 {pizza.stage !== 'Order Ready' && (
                   <>
-                    <button onClick={() => handleMarkAsPicked(pizza.id)}>Picked</button>
+                  
                   </>
                 )}
                 <button onClick={() => handleCancelOrder(pizza.id)}>Cancel</button>
