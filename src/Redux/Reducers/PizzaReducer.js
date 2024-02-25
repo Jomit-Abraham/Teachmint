@@ -4,11 +4,13 @@ import {
   MOVE_TO_NEXT_STAGE,
   MARK_AS_PICKED,
   CANCEL_ORDER,
+  GET_TIME
 } from '../Actions/Action';
 
 const initialState = {
   orders: [],
   totalDeliveredToday: 0,
+  timer:0
 };
 
 const pizzaReducer = (state = initialState, action) => {
@@ -16,20 +18,22 @@ const pizzaReducer = (state = initialState, action) => {
     case PLACE_ORDER:
       return {
         ...state,
-        orders: [...state.orders, { ...action.payload, stage: 'Order Placed', remainingTime: 0, timeSpentInStage: 0, id: state.orders.length + 1, startTime: new Date() }],
+        orders: [...state.orders, { ...action.payload, stage: 'Order Placed',  id: state.orders.length + 1, startTime: new Date(),timer:true }],
       };
     case MOVE_TO_NEXT_STAGE:
       return {
         ...state,
         orders: state.orders.map(order =>
-          order.id === action.payload ? { ...order, stage: getNextStage(order.stage), timeSpentInStage: 0, startTime: new Date() } : { ...order, timeSpentInStage: order.timeSpentInStage + calculateTimeDifference(order.startTime) }
+          (
+          order.id === action.payload ? { ...order, stage: getNextStage(order.stage)} : { ...order})
         ),
+        
       };
     case MARK_AS_PICKED:
       return {
         ...state,
         orders: state.orders.map(order =>
-          order.id === action.payload ? { ...order, stage: 'Order Picked', timeSpentInStage: order.timeSpentInStage + calculateTimeDifference(order.startTime) } : order
+          order.id === action.payload ? { ...order, stage: 'Order Picked',  } : { ...order}
         ),
         totalDeliveredToday: state.totalDeliveredToday + 1,
       };
@@ -38,6 +42,11 @@ const pizzaReducer = (state = initialState, action) => {
         ...state,
         orders: state.orders.filter(order => order.id !== action.payload),
       };
+      case GET_TIME:
+        return{
+          ...state,
+          timer:action.payload
+        }
     default:
       return state;
   }

@@ -6,8 +6,8 @@ import PizzaList from "./PizzaList";
 
 const HomePage=()=>{
     return(
-        <Box
-        sx={{background:'#7e9491'}}
+        <Box height="100vh"
+        sx={{background:'#148785'}}
         display='flex'
         >
             <PizzaForm/>

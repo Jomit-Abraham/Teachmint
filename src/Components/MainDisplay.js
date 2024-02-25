@@ -1,63 +1,46 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {  cancelPizzaOrder } from '../Redux/Actions/Action';
-import { Box } from '@mui/material';
+import { cancelPizzaOrder } from '../Redux/Actions/Action';
+import { Box, Typography } from '@mui/material';
+import Table from './ReusableComponents/Table'
 
 const MainDisplay = () => {
   const dispatch = useDispatch();
   const pizzasInProgress = useSelector(state => state?.pizza?.orders.filter(order => order?.stage !== 'Order Picked'));
   const totalDeliveredToday = useSelector(state => state?.pizza?.totalDeliveredToday);
 
-  
 
-  
+
+
 
   const handleCancelOrder = (pizzaId) => {
     dispatch(cancelPizzaOrder(pizzaId));
   };
 
+  const headers=['Order ID','Stage','Total time spent','Action']
+
   return (
     <Box
-    
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#96fff3',
+        m: 1,
+        borderRadius: 1,
+        p: 1
+      }}
     >
-      <h2>Pizzas In Progress</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Type</th>
-            <th>Size</th>
-            <th>Base</th>
-            <th>Stage</th>
-            <th>Remaining Time</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pizzasInProgress.map(pizza => (
-            <tr key={pizza.id}>
-              <td>{pizza.id}</td>
-              <td>{pizza.type}</td>
-              <td>{pizza.size}</td>
-              <td>{pizza.base}</td>
-              <td>{pizza.stage}</td>
-              <td>{pizza.remainingTime}</td>
-              <td>
-                {pizza.stage !== 'Order Ready' && (
-                  <>
-                  
-                  </>
-                )}
-                <button onClick={() => handleCancelOrder(pizza.id)}>Cancel</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <h2>Total Pizza Delivered Today: {totalDeliveredToday}</h2>
-      </div>
-      </Box>
+
+    <Typography mb={3}>Order In progress</Typography>
+
+      <Table
+       headers={headers} 
+       orders={pizzasInProgress}
+       handleCancelOrder={handleCancelOrder} />
+
+       <Typography mt={3}>Total Pizza Delivered Today: {totalDeliveredToday}</Typography>
+
+    </Box>
   );
 };
 

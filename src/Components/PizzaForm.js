@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { placeOrder } from '../Redux/Actions/Action';
 import { Box, Button, InputLabel, MenuItem, Select } from '@mui/material';
+import { getTimer } from '../Redux/Actions/Action';
 
 
 const PizzaForm = () => {
@@ -27,8 +28,8 @@ const PizzaForm = () => {
 
   return (
 
-    <Box height='600px'
-      width='400px'
+    <Box height='auto'
+      width='250px'
       my={4}
       display="flex"
       flexDirection='column'
