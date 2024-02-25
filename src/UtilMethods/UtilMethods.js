@@ -7,6 +7,5 @@ export  const formatTime = (time) => {
   export  const calculateTimeDifference = (startTime) => {
     const currentTime = new Date();
     const difference = Math.floor((currentTime - startTime) / 1000); // in seconds
-    console.log(difference)
     return difference;
   };

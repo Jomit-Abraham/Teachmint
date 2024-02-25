@@ -25,8 +25,7 @@ const PizzaCard = (props) => {
     }, [isActive, totalSeconds]);
     if (pizza.size === 'small' && totalSeconds > 180 ||
         pizza.size === 'medium' && totalSeconds > 240 ||
-        pizza.size === 'large' && totalSeconds > 300) 
-        {
+        pizza.size === 'large' && totalSeconds > 300) {
         redAlert = true
     }
 

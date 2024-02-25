@@ -1,10 +1,9 @@
-// src/store/reducers/pizzaReducer.js
+
 import {
   PLACE_ORDER,
   MOVE_TO_NEXT_STAGE,
   MARK_AS_PICKED,
   CANCEL_ORDER,
-  GET_TIME
 } from '../Actions/Action';
 
 const initialState = {
@@ -18,21 +17,21 @@ const pizzaReducer = (state = initialState, action) => {
     case PLACE_ORDER:
       return {
         ...state,
-        orders: [...state.orders, { ...action.payload, stage: 'Order Placed',  id: state.orders.length + 1, startTime: new Date(),timer:true }],
+        orders: [...state.orders, { ...action?.payload, stage: 'Order Placed',  id: state?.orders?.length + 1, startTime: new Date(),timer:true }],
       };
     case MOVE_TO_NEXT_STAGE:
       return {
         ...state,
-        orders: state.orders.map(order =>
+        orders: state?.orders?.map(order =>
           (
-          order.id === action.payload ? { ...order, stage: getNextStage(order.stage)} : { ...order})
+          order.id === action?.payload ? { ...order, stage: getNextStage(order.stage)} : { ...order})
         ),
         
       };
     case MARK_AS_PICKED:
       return {
         ...state,
-        orders: state.orders.map(order =>
+        orders: state?.orders?.map(order =>
           order.id === action.payload ? { ...order, stage: 'Order Picked',  } : { ...order}
         ),
         totalDeliveredToday: state.totalDeliveredToday + 1,
@@ -40,13 +39,8 @@ const pizzaReducer = (state = initialState, action) => {
     case CANCEL_ORDER:
       return {
         ...state,
-        orders: state.orders.filter(order => order.id !== action.payload),
+        orders: state?.orders?.filter(order => order.id !== action.payload),
       };
-      case GET_TIME:
-        return{
-          ...state,
-          timer:action.payload
-        }
     default:
       return state;
   }
@@ -65,10 +59,5 @@ const getNextStage = (currentStage) => {
   }
 };
 
-const calculateTimeDifference = (startTime) => {
-  const currentTime = new Date();
-  const difference = Math.floor((currentTime - startTime) / 1000); // in seconds
-  return difference;
-};
 
 export default pizzaReducer;
